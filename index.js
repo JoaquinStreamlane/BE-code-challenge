@@ -1,21 +1,15 @@
 import express from "express";
+import { getReport } from "./reports.controller.js";
 
 const app = express();
 const port = 8080;
 
-const USERS_URL = "https://jsonplaceholder.typicode.com/users";
-const POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
-
 app.get("/", (_, res) => res.send("Welcome"));
 
-app.get("/users", async (req, res) => {
-  const users = await fetch(USERS_URL).then(res => res.json());
-  res.send(users);
-});
-
-app.get("/users/:id", async (req, res) => {
-  const user = await fetch(`${USERS_URL}/${req.params.id}`).then(res => res.json());
-  res.send(user);
+app.get("/report", async (req, res) => {
+  const sorting = req.query.sortBy;
+  const report = await getReport(sorting);
+  res.send(report);
 });
 
 app.listen(port, () => {
